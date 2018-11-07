@@ -11,7 +11,7 @@
 		81B271352192D9E600EDD652 /* CompaniesController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81B271342192D9E600EDD652 /* CompaniesController.swift */; };
 		81B2713A2192D9E700EDD652 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 81B271392192D9E700EDD652 /* Assets.xcassets */; };
 		81B2713D2192D9E700EDD652 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 81B2713B2192D9E700EDD652 /* LaunchScreen.storyboard */; };
-		81B271452192E65B00EDD652 /* Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81B271442192E65B00EDD652 /* Extensions.swift */; };
+		81B271452192E65B00EDD652 /* UIColor+theme.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81B271442192E65B00EDD652 /* UIColor+theme.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -21,7 +21,7 @@
 		81B271392192D9E700EDD652 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		81B2713C2192D9E700EDD652 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		81B2713E2192D9E700EDD652 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		81B271442192E65B00EDD652 /* Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Extensions.swift; sourceTree = "<group>"; };
+		81B271442192E65B00EDD652 /* UIColor+theme.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIColor+theme.swift"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -59,7 +59,7 @@
 				81B271392192D9E700EDD652 /* Assets.xcassets */,
 				81B2713B2192D9E700EDD652 /* LaunchScreen.storyboard */,
 				81B2713E2192D9E700EDD652 /* Info.plist */,
-				81B271442192E65B00EDD652 /* Extensions.swift */,
+				81B271442192E65B00EDD652 /* UIColor+theme.swift */,
 			);
 			path = iCompanies;
 			sourceTree = "<group>";
@@ -135,7 +135,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				81B271352192D9E600EDD652 /* CompaniesController.swift in Sources */,
-				81B271452192E65B00EDD652 /* Extensions.swift in Sources */,
+				81B271452192E65B00EDD652 /* UIColor+theme.swift in Sources */,
 				81B271332192D9E600EDD652 /* AppDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		81AEFB682193444800E9C97C /* Company.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81AEFB672193444800E9C97C /* Company.swift */; };
+		81AEFB6A2193455E00E9C97C /* CreateCompanyController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81AEFB692193455E00E9C97C /* CreateCompanyController.swift */; };
 		81B271332192D9E600EDD652 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81B271322192D9E600EDD652 /* AppDelegate.swift */; };
 		81B271352192D9E600EDD652 /* CompaniesController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81B271342192D9E600EDD652 /* CompaniesController.swift */; };
 		81B2713A2192D9E700EDD652 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 81B271392192D9E700EDD652 /* Assets.xcassets */; };
@@ -15,6 +17,8 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		81AEFB672193444800E9C97C /* Company.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Company.swift; sourceTree = "<group>"; };
+		81AEFB692193455E00E9C97C /* CreateCompanyController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateCompanyController.swift; sourceTree = "<group>"; };
 		81B2712F2192D9E600EDD652 /* iCompanies.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = iCompanies.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		81B271322192D9E600EDD652 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		81B271342192D9E600EDD652 /* CompaniesController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CompaniesController.swift; sourceTree = "<group>"; };
@@ -54,12 +58,14 @@
 		81B271312192D9E600EDD652 /* iCompanies */ = {
 			isa = PBXGroup;
 			children = (
-				81B271322192D9E600EDD652 /* AppDelegate.swift */,
+				81AEFB672193444800E9C97C /* Company.swift */,
 				81B271342192D9E600EDD652 /* CompaniesController.swift */,
+				81AEFB692193455E00E9C97C /* CreateCompanyController.swift */,
+				81B271442192E65B00EDD652 /* UIColor+theme.swift */,
+				81B271322192D9E600EDD652 /* AppDelegate.swift */,
 				81B271392192D9E700EDD652 /* Assets.xcassets */,
 				81B2713B2192D9E700EDD652 /* LaunchScreen.storyboard */,
 				81B2713E2192D9E700EDD652 /* Info.plist */,
-				81B271442192E65B00EDD652 /* UIColor+theme.swift */,
 			);
 			path = iCompanies;
 			sourceTree = "<group>";
@@ -136,7 +142,9 @@
 			files = (
 				81B271352192D9E600EDD652 /* CompaniesController.swift in Sources */,
 				81B271452192E65B00EDD652 /* UIColor+theme.swift in Sources */,
+				81AEFB6A2193455E00E9C97C /* CreateCompanyController.swift in Sources */,
 				81B271332192D9E600EDD652 /* AppDelegate.swift in Sources */,
+				81AEFB682193444800E9C97C /* Company.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

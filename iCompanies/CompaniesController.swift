@@ -10,13 +10,18 @@ import UIKit
 
 class CompaniesController: UITableViewController {
     private let cellId = "cellId"
+    let companies = [
+        Company(name: "Apple", founded: Date()),
+        Company(name: "Google", founded: Date()),
+        Company(name: "Facebook", founded: Date())
+    ]
 
     override func viewDidLoad() {
         super.viewDidLoad()
         
         view.backgroundColor = .white
-        setupNavigationBarStyle()
         
+        navigationItem.title = "Companies"
         navigationItem.rightBarButtonItem = UIBarButtonItem(image: #imageLiteral(resourceName: "plus").withRenderingMode(.alwaysOriginal), style: .plain, target: self, action: #selector(handleAddCompany))
         
         tableView.backgroundColor = .darkblue
@@ -25,17 +30,11 @@ class CompaniesController: UITableViewController {
         tableView.register(UITableViewCell.self, forCellReuseIdentifier: cellId)
     }
     
-    private func setupNavigationBarStyle() {
-        navigationController?.navigationBar.isTranslucent = false
-        navigationController?.navigationBar.barTintColor = .lightRed
-        navigationController?.navigationBar.prefersLargeTitles = true
-        navigationController?.navigationBar.titleTextAttributes = [NSAttributedString.Key.foregroundColor : UIColor.white]
-        navigationController?.navigationBar.largeTitleTextAttributes = [NSAttributedString.Key.foregroundColor : UIColor.white]
-        navigationItem.title = "Companies"
-    }
-    
     @objc fileprivate func handleAddCompany() {
-        print("Handle add company")
+        let createCompanyController = CreateCompanyController()
+        let navController = CustomNavigationController(rootViewController: createCompanyController)
+        
+        self.present(navController, animated: true, completion: nil)
     }
 }
 
@@ -55,7 +54,8 @@ extension CompaniesController {
         let cell = tableView.dequeueReusableCell(withIdentifier: cellId, for: indexPath)
         cell.backgroundColor = .tealColoer
         
-        cell.textLabel?.text = "Company Name"
+        let company = companies[indexPath.row]
+        cell.textLabel?.text = company.name
         cell.textLabel?.textColor = .white
         cell.textLabel?.font = UIFont.boldSystemFont(ofSize: 14)
         
@@ -63,7 +63,7 @@ extension CompaniesController {
     }
     
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return 5
+        return companies.count
     }
 }
 

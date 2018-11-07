@@ -1,5 +1,5 @@
 //
-//  Extensions.swift
+//  UIColor+theme.swift
 //  iCompanies
 //
 //  Created by Elias Myronidis on 07/11/2018.

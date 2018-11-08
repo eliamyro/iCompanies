@@ -10,7 +10,7 @@ import UIKit
 
 class CompaniesController: UITableViewController {
     private let cellId = "cellId"
-    let companies = [
+    var companies = [
         Company(name: "Apple", founded: Date()),
         Company(name: "Google", founded: Date()),
         Company(name: "Facebook", founded: Date())
@@ -32,6 +32,7 @@ class CompaniesController: UITableViewController {
     
     @objc fileprivate func handleAddCompany() {
         let createCompanyController = CreateCompanyController()
+        createCompanyController.delegate = self
         let navController = CustomNavigationController(rootViewController: createCompanyController)
         
         self.present(navController, animated: true, completion: nil)
@@ -52,7 +53,7 @@ extension CompaniesController {
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: cellId, for: indexPath)
-        cell.backgroundColor = .tealColoer
+        cell.backgroundColor = .tealColor
         
         let company = companies[indexPath.row]
         cell.textLabel?.text = company.name
@@ -64,6 +65,15 @@ extension CompaniesController {
     
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return companies.count
+    }
+}
+
+extension CompaniesController: CreateCompanyControllerDelegate {
+    func didAddCompany(company: Company) {
+        companies.append(company)
+        
+        let indexPath = IndexPath(row: companies.count - 1, section: 0)
+        tableView.insertRows(at: [indexPath], with: .automatic)
     }
 }
 

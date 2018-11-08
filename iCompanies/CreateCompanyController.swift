@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import CoreData
 
 protocol CreateCompanyControllerDelegate: class {
     func didAddCompany(company: Company)
@@ -34,6 +35,7 @@ class CreateCompanyController: UIViewController {
     
     lazy var nameTextField: UITextField = {
         let textField =  UITextField()
+        textField.placeholder = "Enter Name"
         textField.translatesAutoresizingMaskIntoConstraints = false
         
         return textField
@@ -75,11 +77,31 @@ class CreateCompanyController: UIViewController {
     }
     
     @objc private func handleSave() {
-        self.dismiss(animated: true) {
-            print("Save button pressed")
-            guard let name = self.nameTextField.text else { return }
-            let company = Company(name: name, founded: Date())
-            self.delegate?.didAddCompany(company: company)
+        print("Saving company")
+       
+        let persistentContainer = NSPersistentContainer(name: "CompaniesDataModel")
+        persistentContainer.loadPersistentStores { (storeDescription, error) in
+            if let error = error {
+                fatalError("Loading of store failed: \(error.localizedDescription)")
+            }
         }
+        
+        let context = persistentContainer.viewContext
+        let company = NSEntityDescription.insertNewObject(forEntityName: "Company", into: context)
+        company.setValue(nameTextField.text, forKey: "name")
+        
+        do {
+            try context.save()
+        } catch let saveError {
+            print("Failed to save company:", saveError)
+        }
+        
+        
+//        self.dismiss(animated: true) {
+//            print("Save button pressed")
+//            guard let name = self.nameTextField.text else { return }
+//            let company = Company(name: name, founded: Date())
+//            self.delegate?.didAddCompany(company: company)
+//        }
     }
 }

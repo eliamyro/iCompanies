@@ -7,14 +7,11 @@
 //
 
 import UIKit
+import CoreData
 
 class CompaniesController: UITableViewController {
     private let cellId = "cellId"
-    var companies = [
-        Company(name: "Apple", founded: Date()),
-        Company(name: "Google", founded: Date()),
-        Company(name: "Facebook", founded: Date())
-    ]
+    var companies = [Company]()
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -28,6 +25,31 @@ class CompaniesController: UITableViewController {
         tableView.separatorColor = .white
         tableView.tableFooterView = UIView()
         tableView.register(UITableViewCell.self, forCellReuseIdentifier: cellId)
+        
+        fetchCompanies()
+    }
+    
+    private func fetchCompanies() {
+        let persistentContainer = NSPersistentContainer(name: "CompaniesDataModel")
+        persistentContainer.loadPersistentStores { (storeDescription, error) in
+            if let error = error {
+                fatalError("Loading of store failed: \(error.localizedDescription)")
+            }
+        }
+        
+        let context = persistentContainer.viewContext
+        
+        let fetchRequest = NSFetchRequest<Company>(entityName: "Company")
+        
+        do {
+            let companies = try context.fetch(fetchRequest)
+            companies.forEach { (company) in
+                print(company.name ?? "")
+            }
+        } catch let fetchError {
+            print("Failed to fetch companies: ", fetchError.localizedDescription)
+        }
+        
     }
     
     @objc fileprivate func handleAddCompany() {

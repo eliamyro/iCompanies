@@ -30,14 +30,7 @@ class CompaniesController: UITableViewController {
     }
     
     private func fetchCompanies() {
-        let persistentContainer = NSPersistentContainer(name: "CompaniesDataModel")
-        persistentContainer.loadPersistentStores { (storeDescription, error) in
-            if let error = error {
-                fatalError("Loading of store failed: \(error.localizedDescription)")
-            }
-        }
-        
-        let context = persistentContainer.viewContext
+        let context = CoreDataManager.shared.persistentContainer.viewContext
         
         let fetchRequest = NSFetchRequest<Company>(entityName: "Company")
         
@@ -46,6 +39,9 @@ class CompaniesController: UITableViewController {
             companies.forEach { (company) in
                 print(company.name ?? "")
             }
+            
+            self.companies = companies
+            tableView.reloadData()
         } catch let fetchError {
             print("Failed to fetch companies: ", fetchError.localizedDescription)
         }

@@ -99,11 +99,17 @@ extension CompaniesController {
             }
         }
         
-        let editAction = UITableViewRowAction(style: .normal, title: "Edit") { (_, indexPath) in
-            print("Editing")
-        }
+        let editAction = UITableViewRowAction(style: .normal, title: "Edit", handler: editCompanyHandler)
         
         return[deleteAction, editAction]
+    }
+    
+    private func editCompanyHandler(action: UITableViewRowAction, indexPath: IndexPath) {
+        let editCompanyController = CreateCompanyController()
+        editCompanyController.delegate = self
+        editCompanyController.company = companies[indexPath.row]
+        let navController = CustomNavigationController(rootViewController: editCompanyController)
+        self.present(navController, animated: true, completion: nil)
     }
 }
 
@@ -113,6 +119,12 @@ extension CompaniesController: CreateCompanyControllerDelegate {
         
         let indexPath = IndexPath(row: companies.count - 1, section: 0)
         tableView.insertRows(at: [indexPath], with: .automatic)
+    }
+    
+    func didEditCompany(company: Company) {
+        let companyRow = companies.firstIndex(of: company)
+        let indexPath = IndexPath(row: companyRow!, section: 0)
+        tableView.reloadRows(at: [indexPath], with: .middle)
     }
 }
 

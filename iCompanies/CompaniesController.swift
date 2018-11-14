@@ -74,7 +74,17 @@ extension CompaniesController {
         cell.backgroundColor = .tealColor
         
         let company = companies[indexPath.row]
-        cell.textLabel?.text = company.name
+        
+        let dateFormater = DateFormatter()
+        dateFormater.dateFormat = "dd MMM, yyyy"
+        
+        if let name = company.name, let founded = company.founded {
+             let foundedDateString = dateFormater.string(from: founded)
+            cell.textLabel?.text = "\(name) - \(foundedDateString)"
+        } else {
+            cell.textLabel?.text = company.name
+        }
+       
         cell.textLabel?.textColor = .white
         cell.textLabel?.font = UIFont.boldSystemFont(ofSize: 14)
         
@@ -86,22 +96,27 @@ extension CompaniesController {
     }
     
     override func tableView(_ tableView: UITableView, editActionsForRowAt indexPath: IndexPath) -> [UITableViewRowAction]? {
-        let deleteAction = UITableViewRowAction(style: .destructive, title: "Delete") { (_, indexPath) in
-            let company = self.companies[indexPath.row]
-            self.companies.remove(at: indexPath.row)
-            self.tableView.deleteRows(at: [indexPath], with: .automatic)
-            let context = CoreDataManager.shared.persistentContainer.viewContext
-            context.delete(company)
-            do {
-                try context.save()
-            } catch let saveError {
-                print("Failed to delete company: ", saveError.localizedDescription)
-            }
-        }
+
+        let deleteAction = UITableViewRowAction(style: .destructive, title: "Delete", handler: deleteCompanyHandler)
+        deleteAction.backgroundColor = .lightRed
         
         let editAction = UITableViewRowAction(style: .normal, title: "Edit", handler: editCompanyHandler)
+        editAction.backgroundColor = .darkblue
         
         return[deleteAction, editAction]
+    }
+    
+    private func deleteCompanyHandler(action: UITableViewRowAction, indexPath: IndexPath) {
+        let company = self.companies[indexPath.row]
+        self.companies.remove(at: indexPath.row)
+        self.tableView.deleteRows(at: [indexPath], with: .automatic)
+        let context = CoreDataManager.shared.persistentContainer.viewContext
+        context.delete(company)
+        do {
+            try context.save()
+        } catch let saveError {
+            print("Failed to delete company: ", saveError.localizedDescription)
+        }
     }
     
     private func editCompanyHandler(action: UITableViewRowAction, indexPath: IndexPath) {
@@ -127,4 +142,3 @@ extension CompaniesController: CreateCompanyControllerDelegate {
         tableView.reloadRows(at: [indexPath], with: .middle)
     }
 }
-

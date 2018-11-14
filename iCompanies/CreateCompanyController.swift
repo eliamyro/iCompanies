@@ -21,6 +21,9 @@ class CreateCompanyController: UIViewController {
     var company: Company? {
         didSet {
             nameTextField.text = company?.name
+            
+            guard let founded = company?.founded else { return }
+            datePicker.date = founded
         }
     }
     
@@ -48,6 +51,14 @@ class CreateCompanyController: UIViewController {
         return textField
     }()
     
+    lazy var datePicker: UIDatePicker = {
+        let dp = UIDatePicker()
+        dp.datePickerMode = .date
+        dp.translatesAutoresizingMaskIntoConstraints = false
+        
+        return dp
+    }()
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -67,21 +78,27 @@ class CreateCompanyController: UIViewController {
         view.addSubview(lighBlueBackgroundView)
         lighBlueBackgroundView.addSubview(nameLabel)
         lighBlueBackgroundView.addSubview(nameTextField)
+        lighBlueBackgroundView.addSubview(datePicker)
         
         lighBlueBackgroundView.topAnchor.constraint(equalTo: view.topAnchor).isActive = true
         lighBlueBackgroundView.leadingAnchor.constraint(equalTo: view.leadingAnchor).isActive = true
         lighBlueBackgroundView.trailingAnchor.constraint(equalTo: view.trailingAnchor).isActive = true
-        lighBlueBackgroundView.heightAnchor.constraint(equalToConstant: 50).isActive = true
+        lighBlueBackgroundView.heightAnchor.constraint(equalToConstant: 250).isActive = true
         
         nameLabel.topAnchor.constraint(equalTo: lighBlueBackgroundView.topAnchor).isActive = true
         nameLabel.leadingAnchor.constraint(equalTo: lighBlueBackgroundView.safeAreaLayoutGuide.leadingAnchor, constant: 16).isActive = true
-        nameLabel.bottomAnchor.constraint(equalTo: lighBlueBackgroundView.bottomAnchor).isActive = true
         nameLabel.widthAnchor.constraint(equalToConstant: 100).isActive = true
+        nameLabel.heightAnchor.constraint(equalToConstant: 50).isActive = true
         
         nameTextField.topAnchor.constraint(equalTo: nameLabel.topAnchor).isActive = true
         nameTextField.leadingAnchor.constraint(equalTo: nameLabel.trailingAnchor).isActive = true
         nameTextField.bottomAnchor.constraint(equalTo: nameLabel.bottomAnchor).isActive = true
         nameTextField.trailingAnchor.constraint(equalTo: lighBlueBackgroundView.safeAreaLayoutGuide.trailingAnchor, constant: -16).isActive = true
+        
+        datePicker.topAnchor.constraint(equalTo: lighBlueBackgroundView.topAnchor, constant: 24).isActive = true
+        datePicker.leadingAnchor.constraint(equalTo: lighBlueBackgroundView.leadingAnchor, constant: 8).isActive = true
+        datePicker.bottomAnchor.constraint(equalTo: lighBlueBackgroundView.bottomAnchor, constant: 8).isActive = true
+        datePicker.trailingAnchor.constraint(equalTo: lighBlueBackgroundView.trailingAnchor, constant: 8).isActive = true
     }
     
     @objc private func handleCancel() {
@@ -100,6 +117,7 @@ class CreateCompanyController: UIViewController {
         let context = CoreDataManager.shared.persistentContainer.viewContext
         let company = NSEntityDescription.insertNewObject(forEntityName: "Company", into: context)
         company.setValue(nameTextField.text, forKey: "name")
+        company.setValue(datePicker.date, forKey: "founded")
         
         do {
             try context.save()
@@ -114,6 +132,7 @@ class CreateCompanyController: UIViewController {
     private func updateCompany() {
         let context = CoreDataManager.shared.persistentContainer.viewContext
         company?.name = nameTextField.text
+        company?.founded = datePicker.date
         
         do {
             try context.save()

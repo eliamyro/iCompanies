@@ -24,6 +24,10 @@ class CreateCompanyController: UIViewController {
             
             guard let founded = company?.founded else { return }
             datePicker.date = founded
+            
+            guard let companyImageData = company?.imageData else { return }
+            companyImageView.image = UIImage(data: companyImageData)
+            setupCircularImageStyle()
         }
     }
     
@@ -38,6 +42,7 @@ class CreateCompanyController: UIViewController {
     lazy var companyImageView: UIImageView = {
         let imageView = UIImageView(image: UIImage(named: "select_photo_empty"))
         imageView.isUserInteractionEnabled = true
+        imageView.contentMode = .scaleAspectFill
         imageView.translatesAutoresizingMaskIntoConstraints = false
         
         imageView.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(handleSelectPhoto)))
@@ -99,8 +104,6 @@ class CreateCompanyController: UIViewController {
         companyImageView.centerXAnchor.constraint(equalTo: lighBlueBackgroundView.centerXAnchor).isActive = true
         companyImageView.widthAnchor.constraint(equalToConstant: 100).isActive = true
         companyImageView.heightAnchor.constraint(equalToConstant: 100).isActive = true
-        companyImageView.layer.cornerRadius = 100 / 2
-        companyImageView.layer.masksToBounds = true
         
         nameLabel.topAnchor.constraint(equalTo: companyImageView.bottomAnchor).isActive = true
         nameLabel.leadingAnchor.constraint(equalTo: lighBlueBackgroundView.safeAreaLayoutGuide.leadingAnchor, constant: 16).isActive = true
@@ -136,6 +139,11 @@ class CreateCompanyController: UIViewController {
         company.setValue(nameTextField.text, forKey: "name")
         company.setValue(datePicker.date, forKey: "founded")
         
+        if let companyImage = companyImageView.image {
+            let imageData = companyImage.jpegData(compressionQuality: 0.8)
+            company.setValue(imageData, forKey: "imageData")
+        }
+        
         do {
             try context.save()
             self.dismiss(animated: true) {
@@ -150,6 +158,10 @@ class CreateCompanyController: UIViewController {
         let context = CoreDataManager.shared.persistentContainer.viewContext
         company?.name = nameTextField.text
         company?.founded = datePicker.date
+        
+        if let companyImage = companyImageView.image {
+            company?.imageData = companyImage.jpegData(compressionQuality: 0.8)
+        }
         
         do {
             try context.save()
@@ -169,6 +181,13 @@ class CreateCompanyController: UIViewController {
         
         self.present(imagePickerController, animated: true, completion: nil)
     }
+    
+    private func setupCircularImageStyle() {
+        companyImageView.layer.cornerRadius = companyImageView.frame.width / 2
+        companyImageView.clipsToBounds = true
+        companyImageView.layer.borderColor = UIColor.darkblue.cgColor
+        companyImageView.layer.borderWidth = 2
+    }
 }
 
 extension CreateCompanyController: UIImagePickerControllerDelegate, UINavigationControllerDelegate {
@@ -179,6 +198,9 @@ extension CreateCompanyController: UIImagePickerControllerDelegate, UINavigation
         } else if let originalImage = info[.originalImage] as? UIImage {
             companyImageView.image = originalImage
         }
+        
+        setupCircularImageStyle()
+        
         dismiss(animated: true, completion: nil)
     }
 }

@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		814C430E2194D390009E2FAD /* CompaniesDataModel.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 814C430C2194D390009E2FAD /* CompaniesDataModel.xcdatamodeld */; };
+		8151D22921AAC744005D41E3 /* CompanyCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8151D22821AAC744005D41E3 /* CompanyCell.swift */; };
 		81AEFB682193444800E9C97C /* Company.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81AEFB672193444800E9C97C /* Company.swift */; };
 		81AEFB6A2193455E00E9C97C /* CreateCompanyController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81AEFB692193455E00E9C97C /* CreateCompanyController.swift */; };
 		81B271332192D9E600EDD652 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81B271322192D9E600EDD652 /* AppDelegate.swift */; };
@@ -20,6 +21,7 @@
 
 /* Begin PBXFileReference section */
 		814C430D2194D390009E2FAD /* CompaniesDataModel.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = CompaniesDataModel.xcdatamodel; sourceTree = "<group>"; };
+		8151D22821AAC744005D41E3 /* CompanyCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CompanyCell.swift; sourceTree = "<group>"; };
 		81AEFB672193444800E9C97C /* Company.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Company.swift; sourceTree = "<group>"; };
 		81AEFB692193455E00E9C97C /* CreateCompanyController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateCompanyController.swift; sourceTree = "<group>"; };
 		81B2712F2192D9E600EDD652 /* iCompanies.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = iCompanies.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -64,6 +66,7 @@
 			children = (
 				81AEFB672193444800E9C97C /* Company.swift */,
 				81B271342192D9E600EDD652 /* CompaniesController.swift */,
+				8151D22821AAC744005D41E3 /* CompanyCell.swift */,
 				81AEFB692193455E00E9C97C /* CreateCompanyController.swift */,
 				81B271442192E65B00EDD652 /* UIColor+theme.swift */,
 				81F6EC8F219596B900895D56 /* CoreDataManager.swift */,
@@ -150,6 +153,7 @@
 				814C430E2194D390009E2FAD /* CompaniesDataModel.xcdatamodeld in Sources */,
 				81B271452192E65B00EDD652 /* UIColor+theme.swift in Sources */,
 				81AEFB6A2193455E00E9C97C /* CreateCompanyController.swift in Sources */,
+				8151D22921AAC744005D41E3 /* CompanyCell.swift in Sources */,
 				81B271332192D9E600EDD652 /* AppDelegate.swift in Sources */,
 				81F6EC90219596B900895D56 /* CoreDataManager.swift in Sources */,
 				81AEFB682193444800E9C97C /* Company.swift in Sources */,

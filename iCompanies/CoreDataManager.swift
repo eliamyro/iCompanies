@@ -41,7 +41,6 @@ struct CoreDataManager {
         let context = persistentContainer.viewContext
         
         let fetchRequest = NSFetchRequest<Employee>(entityName: "Employee")
-//        fetchRequest.predicate = NSPredicate(format: "name = %@", companyName)
         
         do {
             let employees = try context.fetch(fetchRequest)
@@ -54,11 +53,11 @@ struct CoreDataManager {
     
     func createEmployee(name: String, completion: (Employee?, Error?) -> ()) {
         let context = persistentContainer.viewContext
-        let employee = NSEntityDescription.insertNewObject(forEntityName: "Employee", into: context)
+        let employee = NSEntityDescription.insertNewObject(forEntityName: "Employee", into: context) as! Employee
         employee.setValue(name, forKey: "name")
         do {
             try context.save()
-            completion(employee as? Employee, nil)
+            completion(employee, nil)
         } catch let saveError {
             completion(nil, saveError)
         }

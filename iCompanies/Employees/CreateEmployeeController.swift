@@ -16,7 +16,7 @@ protocol CreateEmployeeControllerDelegate: class {
 class CreateEmployeeController: UIViewController {
     
     weak var delegate: CreateEmployeeControllerDelegate?
-    
+    var company: Company?
     
     lazy var lightBlueBackgroundView: UIView = {
         let view = setupLightBlueBackgroundView(height: 50)
@@ -70,7 +70,9 @@ class CreateEmployeeController: UIViewController {
     
     @objc private func handleSaveButton() {
         guard let employeeName = nameTextField.text else { return }
-        CoreDataManager.shared.createEmployee(name: employeeName) { employee, error in
+        guard let company = company else { return }
+        
+        CoreDataManager.shared.createEmployee(name: employeeName, company: company) { employee, error in
             if let error = error {
                 print("Failed to save employee: ", error.localizedDescription)
                 return

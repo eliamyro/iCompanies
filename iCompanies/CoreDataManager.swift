@@ -37,24 +37,12 @@ struct CoreDataManager {
         }
     }
     
-    func fetchEmployees(companyName: String) -> [Employee] {
-        let context = persistentContainer.viewContext
-        
-        let fetchRequest = NSFetchRequest<Employee>(entityName: "Employee")
-        
-        do {
-            let employees = try context.fetch(fetchRequest)
-            return employees
-        } catch let fetchError {
-            print("Failed to fetch employees: ", fetchError.localizedDescription)
-            return []
-        }
-    }
-    
-    func createEmployee(name: String, completion: (Employee?, Error?) -> ()) {
+    func createEmployee(name: String, company: Company, completion: (Employee?, Error?) -> ()) {
         let context = persistentContainer.viewContext
         let employee = NSEntityDescription.insertNewObject(forEntityName: "Employee", into: context) as! Employee
-        employee.setValue(name, forKey: "name")
+        employee.company = company
+        employee.name = name
+        
         do {
             try context.save()
             completion(employee, nil)

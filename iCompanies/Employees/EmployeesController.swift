@@ -23,9 +23,13 @@ class EmployeesController: UITableViewController {
         setupPlusButtonInNavBar(selector: #selector(handleAdd))
         
         tableView.register(UITableViewCell.self, forCellReuseIdentifier: EmployeesController.CELL_ID)
-        
-        guard let companyName = company?.name else { return }
-        employees = CoreDataManager.shared.fetchEmployees(companyName: companyName)
+      
+        fetchEmployees()
+    }
+    
+    private func fetchEmployees() {
+        guard let companyEmployees = company?.employees?.allObjects as? [Employee] else { return }
+        employees = companyEmployees
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -39,6 +43,7 @@ class EmployeesController: UITableViewController {
     @objc private func handleAdd() {
         let createEmployeeController = CreateEmployeeController()
         createEmployeeController.delegate = self
+        createEmployeeController.company = company
         let navController = UINavigationController(rootViewController: createEmployeeController)
         self.present(navController, animated: true, completion: nil)
     }

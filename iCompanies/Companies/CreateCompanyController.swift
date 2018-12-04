@@ -31,13 +31,12 @@ class CreateCompanyController: UIViewController {
         }
     }
     
-    lazy var lighBlueBackgroundView: UIView = {
-       let view = UIView()
-        view.backgroundColor = .lightBlue
-        view.translatesAutoresizingMaskIntoConstraints = false
+    lazy var lightBlueBackgroundView: UIView = {
+        let view = setupLightBlueBackgroundView(height: 350)
         
         return view
     }()
+    
     
     lazy var companyImageView: UIImageView = {
         let imageView = UIImageView(image: UIImage(named: "select_photo_empty"))
@@ -77,7 +76,7 @@ class CreateCompanyController: UIViewController {
         super.viewDidLoad()
         
         setupCancelButtonInNavBar()
-        navigationItem.rightBarButtonItem = UIBarButtonItem(title: "Save", style: .plain, target: self, action: #selector(handleSave))
+        setupSaveButtonInNavBar(selector: #selector(handleSave))
         
         setupUI()
     }
@@ -89,36 +88,30 @@ class CreateCompanyController: UIViewController {
     }
     
     private func setupUI() {
-        view.addSubview(lighBlueBackgroundView)
-        lighBlueBackgroundView.addSubview(companyImageView)
-        lighBlueBackgroundView.addSubview(nameLabel)
-        lighBlueBackgroundView.addSubview(nameTextField)
-        lighBlueBackgroundView.addSubview(datePicker)
+        lightBlueBackgroundView.addSubview(companyImageView)
+        lightBlueBackgroundView.addSubview(nameLabel)
+        lightBlueBackgroundView.addSubview(nameTextField)
+        lightBlueBackgroundView.addSubview(datePicker)
         
-        lighBlueBackgroundView.topAnchor.constraint(equalTo: view.topAnchor).isActive = true
-        lighBlueBackgroundView.leadingAnchor.constraint(equalTo: view.leadingAnchor).isActive = true
-        lighBlueBackgroundView.trailingAnchor.constraint(equalTo: view.trailingAnchor).isActive = true
-        lighBlueBackgroundView.heightAnchor.constraint(equalToConstant: 350).isActive = true
-        
-        companyImageView.topAnchor.constraint(equalTo: lighBlueBackgroundView.topAnchor, constant: 8).isActive = true
-        companyImageView.centerXAnchor.constraint(equalTo: lighBlueBackgroundView.centerXAnchor).isActive = true
+        companyImageView.topAnchor.constraint(equalTo: lightBlueBackgroundView.topAnchor, constant: 8).isActive = true
+        companyImageView.centerXAnchor.constraint(equalTo: lightBlueBackgroundView.centerXAnchor).isActive = true
         companyImageView.widthAnchor.constraint(equalToConstant: 100).isActive = true
         companyImageView.heightAnchor.constraint(equalToConstant: 100).isActive = true
         
         nameLabel.topAnchor.constraint(equalTo: companyImageView.bottomAnchor).isActive = true
-        nameLabel.leadingAnchor.constraint(equalTo: lighBlueBackgroundView.safeAreaLayoutGuide.leadingAnchor, constant: 16).isActive = true
+        nameLabel.leadingAnchor.constraint(equalTo: lightBlueBackgroundView.safeAreaLayoutGuide.leadingAnchor, constant: 16).isActive = true
         nameLabel.widthAnchor.constraint(equalToConstant: 100).isActive = true
         nameLabel.heightAnchor.constraint(equalToConstant: 50).isActive = true
         
         nameTextField.topAnchor.constraint(equalTo: nameLabel.topAnchor).isActive = true
         nameTextField.leadingAnchor.constraint(equalTo: nameLabel.trailingAnchor).isActive = true
         nameTextField.bottomAnchor.constraint(equalTo: nameLabel.bottomAnchor).isActive = true
-        nameTextField.trailingAnchor.constraint(equalTo: lighBlueBackgroundView.safeAreaLayoutGuide.trailingAnchor, constant: -16).isActive = true
+        nameTextField.trailingAnchor.constraint(equalTo: lightBlueBackgroundView.safeAreaLayoutGuide.trailingAnchor, constant: -16).isActive = true
         
         datePicker.topAnchor.constraint(equalTo: nameLabel.bottomAnchor, constant: 8).isActive = true
-        datePicker.leadingAnchor.constraint(equalTo: lighBlueBackgroundView.leadingAnchor, constant: 8).isActive = true
-        datePicker.bottomAnchor.constraint(equalTo: lighBlueBackgroundView.bottomAnchor, constant: 8).isActive = true
-        datePicker.trailingAnchor.constraint(equalTo: lighBlueBackgroundView.trailingAnchor, constant: 8).isActive = true
+        datePicker.leadingAnchor.constraint(equalTo: lightBlueBackgroundView.leadingAnchor, constant: 8).isActive = true
+        datePicker.bottomAnchor.constraint(equalTo: lightBlueBackgroundView.bottomAnchor, constant: 8).isActive = true
+        datePicker.trailingAnchor.constraint(equalTo: lightBlueBackgroundView.trailingAnchor, constant: 8).isActive = true
     }
     
     @objc private func handleSave() {

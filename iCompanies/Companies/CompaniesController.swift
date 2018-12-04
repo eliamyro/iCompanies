@@ -18,22 +18,14 @@ class CompaniesController: UITableViewController {
         
         return barButtonItem
     }()
-    
-    lazy var addCompanyBarButton: UIBarButtonItem = {
-        let barButtonItem = UIBarButtonItem(image: #imageLiteral(resourceName: "plus").withRenderingMode(.alwaysOriginal), style: .plain, target: self, action: #selector(handleAddCompany))
-        
-        return barButtonItem
-    }()
 
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        view.backgroundColor = .white
-        
         navigationItem.title = "Companies"
         
         navigationItem.leftBarButtonItem = resetBarButton
-        navigationItem.rightBarButtonItem = addCompanyBarButton
+        setupPlusButtonInNavBar(selector: #selector(handleAddCompany))
         
         tableView.backgroundColor = .darkblue
         tableView.separatorColor = .white

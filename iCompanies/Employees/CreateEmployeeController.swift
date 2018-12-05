@@ -19,7 +19,7 @@ class CreateEmployeeController: UIViewController {
     var company: Company?
     
     lazy var lightBlueBackgroundView: UIView = {
-        let view = setupLightBlueBackgroundView(height: 50)
+        let view = setupLightBlueBackgroundView(height: 100)
         
         return view
     }()
@@ -35,6 +35,22 @@ class CreateEmployeeController: UIViewController {
     lazy var nameTextField: UITextField = {
         let textField =  UITextField()
         textField.placeholder = "Enter Name"
+        textField.translatesAutoresizingMaskIntoConstraints = false
+        
+        return textField
+    }()
+    
+    lazy var birthdayLabel: UILabel = {
+        let label = UILabel()
+        label.text = "Birthday"
+        label.translatesAutoresizingMaskIntoConstraints = false
+        
+        return label
+    }()
+    
+    lazy var birthdayTextField: UITextField = {
+        let textField = UITextField()
+        textField.placeholder = "dd//MM/yyyy"
         textField.translatesAutoresizingMaskIntoConstraints = false
         
         return textField
@@ -56,6 +72,8 @@ class CreateEmployeeController: UIViewController {
         
         lightBlueBackgroundView.addSubview(nameLabel)
         lightBlueBackgroundView.addSubview(nameTextField)
+        lightBlueBackgroundView.addSubview(birthdayLabel)
+        lightBlueBackgroundView.addSubview(birthdayTextField)
         
         nameLabel.topAnchor.constraint(equalTo: lightBlueBackgroundView.topAnchor).isActive = true
         nameLabel.leadingAnchor.constraint(equalTo: lightBlueBackgroundView.safeAreaLayoutGuide.leadingAnchor, constant: 16).isActive = true
@@ -66,23 +84,53 @@ class CreateEmployeeController: UIViewController {
         nameTextField.leadingAnchor.constraint(equalTo: nameLabel.trailingAnchor).isActive = true
         nameTextField.bottomAnchor.constraint(equalTo: nameLabel.bottomAnchor).isActive = true
         nameTextField.trailingAnchor.constraint(equalTo: lightBlueBackgroundView.safeAreaLayoutGuide.trailingAnchor, constant: -16).isActive = true
+        
+        birthdayLabel.topAnchor.constraint(equalTo: nameLabel.bottomAnchor).isActive = true
+        birthdayLabel.leadingAnchor.constraint(equalTo: lightBlueBackgroundView.safeAreaLayoutGuide.leadingAnchor, constant: 16).isActive = true
+        birthdayLabel.widthAnchor.constraint(equalToConstant: 100).isActive = true
+        birthdayLabel.heightAnchor.constraint(equalToConstant: 50).isActive = true
+        
+        birthdayTextField.topAnchor.constraint(equalTo: birthdayLabel.topAnchor).isActive = true
+        birthdayTextField.leadingAnchor.constraint(equalTo: birthdayLabel.trailingAnchor).isActive = true
+        birthdayTextField.bottomAnchor.constraint(equalTo: birthdayLabel.bottomAnchor).isActive = true
+        birthdayTextField.trailingAnchor.constraint(equalTo: lightBlueBackgroundView.safeAreaLayoutGuide.trailingAnchor, constant: -16).isActive = true
     }
     
     @objc private func handleSaveButton() {
         guard let employeeName = nameTextField.text else { return }
         guard let company = company else { return }
+        guard let birthdayText = birthdayTextField.text else { return }
         
-        CoreDataManager.shared.createEmployee(name: employeeName, company: company) { employee, error in
-            if let error = error {
-                print("Failed to save employee: ", error.localizedDescription)
+        if birthdayText.isEmpty {
+            showError(title: "Birthday Error", message: "Please enter a birthday")
+        } else {
+            let dateFormater = DateFormatter()
+            dateFormater.dateFormat = "dd/MM/yyyy"
+            
+            guard let birthdayDate = dateFormater.date(from: birthdayText) else {
+                showError(title: "Wrong Birthday Format", message: "Please enter a valid birthday format")
                 return
             }
             
-            self.dismiss(animated: true, completion: {
-                if let employee = employee {
-                    self.delegate?.didAddEmployee(employee: employee)
+            CoreDataManager.shared.createEmployee(name: employeeName, birthday: birthdayDate, company: company) { employee, error in
+                if let error = error {
+                    print("Failed to save employee: ", error.localizedDescription)
+                    return
                 }
-            })
+                
+                self.dismiss(animated: true, completion: {
+                    if let employee = employee {
+                        self.delegate?.didAddEmployee(employee: employee)
+                    }
+                })
+            }
         }
+    }
+    
+    private func showError(title: String, message: String) {
+        let alertController = UIAlertController(title: title, message: message, preferredStyle: .alert)
+        let alertAction = UIAlertAction(title: "OK", style: .default, handler: nil)
+        alertController.addAction(alertAction)
+        self.present(alertController, animated: true, completion: nil)
     }
 }

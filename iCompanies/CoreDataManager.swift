@@ -8,6 +8,8 @@
 
 import CoreData
 
+typealias createEmployeeHandler = (Employee?, Error?) -> Void
+
 struct CoreDataManager {
     
     static let shared = CoreDataManager()
@@ -37,11 +39,12 @@ struct CoreDataManager {
         }
     }
     
-    func createEmployee(name: String, company: Company, completion: (Employee?, Error?) -> ()) {
+    func createEmployee(name: String, birthday: Date, company: Company, completion: createEmployeeHandler) {
         let context = persistentContainer.viewContext
         let employee = NSEntityDescription.insertNewObject(forEntityName: "Employee", into: context) as! Employee
         employee.company = company
         employee.name = name
+        employee.birthday = birthday
         
         do {
             try context.save()

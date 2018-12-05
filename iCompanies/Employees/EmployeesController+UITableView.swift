@@ -19,8 +19,14 @@ extension EmployeesController {
         cell.textLabel?.font = UIFont.boldSystemFont(ofSize: 15)
         cell.textLabel?.textColor = UIColor.white
         
-        cell.textLabel?.text = employees[indexPath.row].name
+        if let birthday = employees[indexPath.row].birthday {
+            let dateFormater = DateFormatter()
+            dateFormater.dateFormat = "dd MMM, yyyy"
         
+            cell.textLabel?.text = "\(employees[indexPath.row].name ?? "") \(dateFormater.string(from: birthday))"
+        } else {
+            cell.textLabel?.text = employees[indexPath.row].name
+        }
         
         return cell
     }

@@ -18,11 +18,11 @@ extension EmployeesController {
         let label = CustomHeader()
         
         if section == 0 {
-            label.text = "Short names"
+            label.text = "Executive"
         } else if section == 1 {
-            label.text = "Long names"
+            label.text = "Senior Management"
         } else {
-            label.text = "Realy long names"
+            label.text = "Staff"
         }
         
         label.backgroundColor = UIColor.lightBlue

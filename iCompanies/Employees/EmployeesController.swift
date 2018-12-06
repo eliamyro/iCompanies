@@ -15,9 +15,9 @@ class EmployeesController: UITableViewController {
     var company: Company?
     var employees = [Employee]()
     
-    var shortNameEmployees = [Employee]()
-    var longNameEmployees = [Employee]()
-    var realyLongNameEmployees = [Employee]()
+    var executives = [Employee]()
+    var seniorManagement = [Employee]()
+    var staff = [Employee]()
     
     var allEmployees = [[Employee]]()
     
@@ -35,31 +35,31 @@ class EmployeesController: UITableViewController {
     
     private func fetchEmployees() {
         guard let companyEmployees = company?.employees?.allObjects as? [Employee] else { return }
-        shortNameEmployees = companyEmployees.filter({ (employee) -> Bool in
-            if let count = employee.name?.count {
-                return count < 6
+        executives = companyEmployees.filter({ (employee) -> Bool in
+            if let type = employee.type {
+                return type == "Executive"
             }
             
             return false
         })
         
-        longNameEmployees = companyEmployees.filter({ (employee) -> Bool in
-            if let count = employee.name?.count {
-                return count > 5 && count < 8
+        seniorManagement = companyEmployees.filter({ (employee) -> Bool in
+            if let type = employee.type {
+                return type == "Senior Management"
             }
             
             return false
         })
         
-        realyLongNameEmployees = companyEmployees.filter({ (employee) -> Bool in
-            if let count = employee.name?.count {
-                return count > 7
+        staff = companyEmployees.filter({ (employee) -> Bool in
+            if let type = employee.type {
+                return type == "Staff"
             }
             
             return false
         })
         
-        allEmployees = [shortNameEmployees, longNameEmployees, realyLongNameEmployees]
+        allEmployees = [executives, seniorManagement, staff]
         
     }
     

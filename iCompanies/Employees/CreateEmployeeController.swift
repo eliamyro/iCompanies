@@ -19,7 +19,7 @@ class CreateEmployeeController: UIViewController {
     var company: Company?
     
     lazy var lightBlueBackgroundView: UIView = {
-        let view = setupLightBlueBackgroundView(height: 100)
+        let view = setupLightBlueBackgroundView(height: 150)
         
         return view
     }()
@@ -56,6 +56,16 @@ class CreateEmployeeController: UIViewController {
         return textField
     }()
     
+    lazy var employeeTypeSegmentedControl: UISegmentedControl = {
+        let types = ["Executive", "Senior Management", "Staff"]
+        let segmentedControl = UISegmentedControl(items: types)
+        segmentedControl.selectedSegmentIndex = 0
+        segmentedControl.tintColor = UIColor.darkblue
+        segmentedControl.translatesAutoresizingMaskIntoConstraints = false
+        
+        return segmentedControl
+    }()
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -74,6 +84,7 @@ class CreateEmployeeController: UIViewController {
         lightBlueBackgroundView.addSubview(nameTextField)
         lightBlueBackgroundView.addSubview(birthdayLabel)
         lightBlueBackgroundView.addSubview(birthdayTextField)
+        lightBlueBackgroundView.addSubview(employeeTypeSegmentedControl)
         
         nameLabel.topAnchor.constraint(equalTo: lightBlueBackgroundView.topAnchor).isActive = true
         nameLabel.leadingAnchor.constraint(equalTo: lightBlueBackgroundView.safeAreaLayoutGuide.leadingAnchor, constant: 16).isActive = true
@@ -94,6 +105,11 @@ class CreateEmployeeController: UIViewController {
         birthdayTextField.leadingAnchor.constraint(equalTo: birthdayLabel.trailingAnchor).isActive = true
         birthdayTextField.bottomAnchor.constraint(equalTo: birthdayLabel.bottomAnchor).isActive = true
         birthdayTextField.trailingAnchor.constraint(equalTo: lightBlueBackgroundView.safeAreaLayoutGuide.trailingAnchor, constant: -16).isActive = true
+        
+        employeeTypeSegmentedControl.topAnchor.constraint(equalTo: birthdayLabel.bottomAnchor).isActive = true
+        employeeTypeSegmentedControl.leadingAnchor.constraint(equalTo: lightBlueBackgroundView.leadingAnchor, constant: 16).isActive = true
+        employeeTypeSegmentedControl.trailingAnchor.constraint(equalTo: lightBlueBackgroundView.trailingAnchor, constant: -16).isActive = true
+        employeeTypeSegmentedControl.heightAnchor.constraint(equalToConstant: 34).isActive = true
     }
     
     @objc private func handleSaveButton() {
@@ -112,7 +128,9 @@ class CreateEmployeeController: UIViewController {
                 return
             }
             
-            CoreDataManager.shared.createEmployee(name: employeeName, birthday: birthdayDate, company: company) { employee, error in
+            guard let employeeType = employeeTypeSegmentedControl.titleForSegment(at: employeeTypeSegmentedControl.selectedSegmentIndex) else { return }
+            
+            CoreDataManager.shared.createEmployee(name: employeeName, birthday: birthdayDate, employeeType: employeeType, company: company) { employee, error in
                 if let error = error {
                     print("Failed to save employee: ", error.localizedDescription)
                     return

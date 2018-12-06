@@ -6,13 +6,15 @@
 //  Copyright © 2018 eliamyro. All rights reserved.
 //
 
-import Foundation
+import UIKit
 
 extension EmployeesController: CreateEmployeeControllerDelegate {
     func didAddEmployee(employee: Employee) {
-        employees.append(employee)
-        
-        let indextPath = IndexPath(row: employees.count - 1, section: 0)
-        tableView.insertRows(at: [indextPath], with: .automatic)
+        guard let section = employeeTypes.firstIndex(of: employee.type!) else { return }
+        let row = allEmployees[section].count
+        let indexPath = IndexPath(row: row, section: section)
+
+        allEmployees[section].append(employee)        
+        tableView.insertRows(at: [indexPath], with: .middle)
     }
 }

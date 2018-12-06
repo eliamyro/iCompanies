@@ -17,13 +17,7 @@ extension EmployeesController {
     override func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         let label = CustomHeader()
         
-        if section == 0 {
-            label.text = "Executive"
-        } else if section == 1 {
-            label.text = "Senior Management"
-        } else {
-            label.text = "Staff"
-        }
+        label.text = employeeTypes[section]
         
         label.backgroundColor = UIColor.lightBlue
         label.textColor = UIColor.darkblue

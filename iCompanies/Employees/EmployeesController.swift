@@ -13,13 +13,9 @@ class EmployeesController: UITableViewController {
     static let CELL_ID = "cellId"
     
     var company: Company?
-    var employees = [Employee]()
-    
-    var executives = [Employee]()
-    var seniorManagement = [Employee]()
-    var staff = [Employee]()
     
     var allEmployees = [[Employee]]()
+    var employeeTypes = [EmployeeType.Executive.rawValue, EmployeeType.SeniorManagement.rawValue, EmployeeType.Staff.rawValue]
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -33,34 +29,16 @@ class EmployeesController: UITableViewController {
         fetchEmployees()
     }
     
-    private func fetchEmployees() {
+    func fetchEmployees() {
         guard let companyEmployees = company?.employees?.allObjects as? [Employee] else { return }
-        executives = companyEmployees.filter({ (employee) -> Bool in
-            if let type = employee.type {
-                return type == "Executive"
-            }
-            
-            return false
-        })
+       
+        allEmployees = []
         
-        seniorManagement = companyEmployees.filter({ (employee) -> Bool in
-            if let type = employee.type {
-                return type == "Senior Management"
-            }
-            
-            return false
-        })
-        
-        staff = companyEmployees.filter({ (employee) -> Bool in
-            if let type = employee.type {
-                return type == "Staff"
-            }
-            
-            return false
-        })
-        
-        allEmployees = [executives, seniorManagement, staff]
-        
+        employeeTypes.forEach { (employeeType) in
+            allEmployees.append(
+                companyEmployees.filter { $0.type == employeeType }
+            )
+        }
     }
     
     override func viewWillAppear(_ animated: Bool) {

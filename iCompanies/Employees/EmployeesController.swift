@@ -15,6 +15,12 @@ class EmployeesController: UITableViewController {
     var company: Company?
     var employees = [Employee]()
     
+    var shortNameEmployees = [Employee]()
+    var longNameEmployees = [Employee]()
+    var realyLongNameEmployees = [Employee]()
+    
+    var allEmployees = [[Employee]]()
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -29,7 +35,32 @@ class EmployeesController: UITableViewController {
     
     private func fetchEmployees() {
         guard let companyEmployees = company?.employees?.allObjects as? [Employee] else { return }
-        employees = companyEmployees
+        shortNameEmployees = companyEmployees.filter({ (employee) -> Bool in
+            if let count = employee.name?.count {
+                return count < 6
+            }
+            
+            return false
+        })
+        
+        longNameEmployees = companyEmployees.filter({ (employee) -> Bool in
+            if let count = employee.name?.count {
+                return count > 5 && count < 8
+            }
+            
+            return false
+        })
+        
+        realyLongNameEmployees = companyEmployees.filter({ (employee) -> Bool in
+            if let count = employee.name?.count {
+                return count > 7
+            }
+            
+            return false
+        })
+        
+        allEmployees = [shortNameEmployees, longNameEmployees, realyLongNameEmployees]
+        
     }
     
     override func viewWillAppear(_ animated: Bool) {

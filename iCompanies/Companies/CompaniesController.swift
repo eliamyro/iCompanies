@@ -18,13 +18,19 @@ class CompaniesController: UITableViewController {
         
         return barButtonItem
     }()
+    
+    lazy var doWorkBarButton: UIBarButtonItem = {
+        let barButtonItem = UIBarButtonItem(title: "Do Work", style: .plain, target: self, action: #selector(handleDoWork))
+        
+        return barButtonItem
+    }()
 
     override func viewDidLoad() {
         super.viewDidLoad()
         
         navigationItem.title = "Companies"
         
-        navigationItem.leftBarButtonItem = resetBarButton
+        navigationItem.leftBarButtonItems = [resetBarButton, doWorkBarButton]
         setupPlusButtonInNavBar(selector: #selector(handleAddCompany))
         
         tableView.backgroundColor = .darkblue
@@ -64,5 +70,21 @@ class CompaniesController: UITableViewController {
         
         companies.removeAll()
         tableView.deleteRows(at: indexPathsToRemove, with: .left)
+    }
+    
+    @objc private func handleDoWork() {
+        CoreDataManager.shared.persistentContainer.performBackgroundTask({ (backgroundContext) in
+            (0...1000).forEach { (value) in
+                print(value)
+                let company = Company(context: backgroundContext)
+                company.name = String(value)
+            }
+            
+            do {
+                try backgroundContext.save()
+            } catch let saveError {
+                print("Failed to save company: ", saveError.localizedDescription)
+            }
+        })
     }
 }

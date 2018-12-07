@@ -19,8 +19,8 @@ class CompaniesController: UITableViewController {
         return barButtonItem
     }()
     
-    lazy var doUpdatesBarButton: UIBarButtonItem = {
-        let barButtonItem = UIBarButtonItem(title: "Do Updates", style: .plain, target: self, action: #selector(handleDoUpdates))
+    lazy var doNestedUpdatedBarButton: UIBarButtonItem = {
+        let barButtonItem = UIBarButtonItem(title: "Nested Updates", style: .plain, target: self, action: #selector(doNestedUpdates))
         
         return barButtonItem
     }()
@@ -30,7 +30,7 @@ class CompaniesController: UITableViewController {
         
         navigationItem.title = "Companies"
         
-        navigationItem.leftBarButtonItems = [resetBarButton, doUpdatesBarButton]
+        navigationItem.leftBarButtonItems = [resetBarButton, doNestedUpdatedBarButton]
         setupPlusButtonInNavBar(selector: #selector(handleAddCompany))
         
         tableView.backgroundColor = .darkblue
@@ -118,6 +118,50 @@ class CompaniesController: UITableViewController {
                 
             } catch let fetchError {
                 print("Failed to fetch companies in the background: ", fetchError.localizedDescription)
+            }
+            
+        }
+    }
+    
+    @objc private func doNestedUpdates() {
+        print("Trying to perform nested updates now...")
+        
+        DispatchQueue.global(qos: .background).async {
+            // we will try our updates
+            
+            // first construct a custom managed object context
+            let privateContext = NSManagedObjectContext(concurrencyType: .privateQueueConcurrencyType)
+            privateContext.parent = CoreDataManager.shared.persistentContainer.viewContext
+            
+            // execute update on the private context
+            let request: NSFetchRequest<Company> = Company.fetchRequest()
+            request.fetchLimit = 3
+            do {
+                let companies = try privateContext.fetch(request)
+                companies.forEach({ (company) in
+                    print("\(company.name ?? "")")
+                    company.name = "A: \(company.name ?? "")"
+                })
+                
+                do {
+                    try privateContext.save()
+                    
+                    DispatchQueue.main.async {
+                        do {
+                            let context = CoreDataManager.shared.persistentContainer.viewContext
+                            if context.hasChanges {
+                                try context.save()
+                            }
+                            self.tableView.reloadData()
+                        } catch let saveError {
+                            print("Failed to save: ", saveError.localizedDescription)
+                        }                                            }
+                } catch let saveError {
+                    print("Failed to save company: ", saveError.localizedDescription)
+                }
+                
+            } catch let fetchError {
+                print("Failed to fetch companies: ", fetchError)
             }
             
         }

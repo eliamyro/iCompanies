@@ -19,8 +19,8 @@ class CompaniesController: UITableViewController {
         return barButtonItem
     }()
     
-    lazy var doWorkBarButton: UIBarButtonItem = {
-        let barButtonItem = UIBarButtonItem(title: "Do Work", style: .plain, target: self, action: #selector(handleDoWork))
+    lazy var doUpdatesBarButton: UIBarButtonItem = {
+        let barButtonItem = UIBarButtonItem(title: "Do Updates", style: .plain, target: self, action: #selector(handleDoUpdates))
         
         return barButtonItem
     }()
@@ -30,7 +30,7 @@ class CompaniesController: UITableViewController {
         
         navigationItem.title = "Companies"
         
-        navigationItem.leftBarButtonItems = [resetBarButton, doWorkBarButton]
+        navigationItem.leftBarButtonItems = [resetBarButton, doUpdatesBarButton]
         setupPlusButtonInNavBar(selector: #selector(handleAddCompany))
         
         tableView.backgroundColor = .darkblue
@@ -74,7 +74,7 @@ class CompaniesController: UITableViewController {
     
     @objc private func handleDoWork() {
         CoreDataManager.shared.persistentContainer.performBackgroundTask({ (backgroundContext) in
-            (0...1000).forEach { (value) in
+            (0...5).forEach { (value) in
                 print(value)
                 let company = Company(context: backgroundContext)
                 company.name = String(value)
@@ -82,9 +82,44 @@ class CompaniesController: UITableViewController {
             
             do {
                 try backgroundContext.save()
+                DispatchQueue.main.async {
+                    self.companies = CoreDataManager.shared.fetchCompanies()
+                    self.tableView.reloadData()
+                }
             } catch let saveError {
                 print("Failed to save company: ", saveError.localizedDescription)
             }
         })
+    }
+    
+    @objc private func handleDoUpdates() {
+        CoreDataManager.shared.persistentContainer.performBackgroundTask { (backgroundContext) in
+            let request: NSFetchRequest<Company> = Company.fetchRequest()
+            
+            do {
+                let companies = try backgroundContext.fetch(request)
+                companies.forEach({ (company) in
+                    print("\(company.name ?? "")")
+                    company.name = "B: \(company.name ?? "")"
+                })
+                
+                do {
+                    try backgroundContext.save()
+                    
+                    // update the ui
+                    DispatchQueue.main.async {
+                        CoreDataManager.shared.persistentContainer.viewContext.reset()
+                        self.companies = CoreDataManager.shared.fetchCompanies()
+                        self.tableView.reloadData()
+                    }
+                } catch let updateError {
+                    print("Failed to update company name: ", updateError)
+                }
+                
+            } catch let fetchError {
+                print("Failed to fetch companies in the background: ", fetchError.localizedDescription)
+            }
+            
+        }
     }
 }

@@ -42,9 +42,11 @@ class CompaniesAutoUpdateController: UITableViewController {
         let deleteBarButton = UIBarButtonItem(title: "Delete", style: .plain, target: self, action: #selector(handleDelete))
         navigationItem.leftBarButtonItems = [addBarButton, deleteBarButton]
         
-        fetchResultsController.fetchedObjects?.forEach({ (company) in
-            print("\(company.name ?? "")")
-        })
+//        fetchResultsController.fetchedObjects?.forEach({ (company) in
+//            print("\(company.name ?? "")")
+//        })
+        
+        let service = Service.shared.downloadCompaniesFromServer()
     }
     
     @objc private func handleAdd() {
@@ -64,7 +66,7 @@ class CompaniesAutoUpdateController: UITableViewController {
     @objc private func handleDelete() {
         print("Handle delete")
         let request: NSFetchRequest<Company> = Company.fetchRequest()
-        request.predicate = NSPredicate(format: "name CONTAINS %@", "p")
+//        request.predicate = NSPredicate(format: "name CONTAINS %@", "p")
         let context = CoreDataManager.shared.persistentContainer.viewContext
         
         do {

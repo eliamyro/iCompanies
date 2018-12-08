@@ -31,6 +31,15 @@ class CompaniesAutoUpdateController: UITableViewController {
         return frc
     }()
     
+    lazy var refControl: UIRefreshControl = {
+        let rc = UIRefreshControl()
+        rc.tintColor = .white
+        rc.addTarget(self, action: #selector(handleRefresh), for: .valueChanged)
+        
+        return rc
+    }()
+    
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -46,7 +55,8 @@ class CompaniesAutoUpdateController: UITableViewController {
 //            print("\(company.name ?? "")")
 //        })
         
-        let service = Service.shared.downloadCompaniesFromServer()
+       
+        self.refreshControl = refControl
     }
     
     @objc private func handleAdd() {
@@ -86,6 +96,11 @@ class CompaniesAutoUpdateController: UITableViewController {
         
         
     }
+    
+    @objc private func handleRefresh() {
+    let service = Service.shared.downloadCompaniesFromServer()
+        refControl.endRefreshing()
+    }
 }
 
 extension CompaniesAutoUpdateController {
@@ -121,6 +136,12 @@ extension CompaniesAutoUpdateController {
         cell.company = company
         
         return cell
+    }
+    
+    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        let employeesController = EmployeesController()
+        employeesController.company = fetchResultsController.object(at: indexPath)
+        navigationController?.pushViewController(employeesController, animated: true)
     }
     
     override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
